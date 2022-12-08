@@ -48,5 +48,8 @@ func (j *JWT) Get(key string) any {
 func (j *JWT) Token(duration time.Duration) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["exp"] = time.Now().Add(duration).Unix()
+	for k, v := range j.data {
+		claims[k] = v
+	}
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(j.secret))
 }
